@@ -4,11 +4,8 @@ Colored topic chips for the Claude Code chat.
 
 Preview:
 
-``
+<img width="981" height="543" alt="image" src="https://github.com/user-attachments/assets/12719754-b75b-4885-8986-ea5049d88b02" />
 
-<img width="945" height="510" alt="image" src="https://github.com/user-attachments/assets/d6f366b5-02e7-4994-9a53-af41c69229e3" />
-
-``
 
 When several lines of work run in one chat, it helps if Claude opens each block of a reply with a topic tag, like **`#nodes`** or **`#viewport`**. The chat draws such tags as grey code text. This mod draws them as chips, each topic in its own color, so you can follow one topic through a long chat by eye.
 
