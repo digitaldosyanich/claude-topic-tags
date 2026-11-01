@@ -1,0 +1,18 @@
+{
+  "name": "topic-tags",
+  "version": "0.2.0",
+  "description": "Draws the topic tags Claude opens a block with, **`#tag`**, as colored chips in the chat",
+  "userConfig": {
+    "colors": {
+      "type": "string",
+      "title": "Tag colors",
+      "description": "Your own colors, as tag=#hex separated by commas, e.g. nodes=#3B82F6, viewport=#EAB308. A tag not listed gets a steady color picked from its name.",
+      "default": ""
+    }
+  },
+  "license": "MIT",
+  "author": {
+    "name": "digitaldosyanich"
+  },
+  "repository": "https://github.com/digitaldosyanich/claude-topic-tags"
+}

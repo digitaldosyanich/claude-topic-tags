@@ -1,0 +1,13 @@
+{
+  "name": "claude-topic-tags",
+  "description": "Colored topic chips for the Claude Code chat",
+  "owner": {
+    "name": "digitaldosyanich"
+  },
+  "plugins": [
+    {
+      "name": "topic-tags",
+      "source": "./"
+    }
+  ]
+}
