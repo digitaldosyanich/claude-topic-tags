@@ -10,6 +10,7 @@ Preview:
 When several lines of work run in one chat, it helps if Claude opens each block of a reply with a topic tag, like **`#nodes`** or **`#viewport`**. The chat draws such tags as grey code text. This mod draws them as chips, each topic in its own color, so you can follow one topic through a long chat by eye.
 
 - A tag counts when it opens a line, written as bold code: `` **`#nodes`** ``.
+- It also counts when it opens a bold heading, `` **`#nodes`, card 17:** ``: the tag becomes the chip and the rest of the heading stays bold beneath it.
 - The tag is drawn as a chip on its own line; the block's text follows beneath it as usual.
 - A tag in the middle of a sentence or inside a code block is left alone, and so is a reply with no tags.
 - Each tag keeps one color, picked from its name. You can set your own colors (below).

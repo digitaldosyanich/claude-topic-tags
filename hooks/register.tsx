@@ -2,11 +2,15 @@ import type { Register } from 'claude-code'
 
 // A topic tag opens a block of a reply as **`#tag`**. The app draws code spans
 // grey, so each tag is drawn here as a chip highlighted in its own color.
+// A tag that opens a bold heading, **`#tag`, the heading:**, counts too: the tag
+// becomes the chip and the rest of the heading stays bold on the line below it.
 
 // The colors a tag nobody named gets, picked by its name so it keeps one.
 const PALETTE = ['#3B82F6', '#EAB308', '#22C55E', '#A855F7', '#EC4899', '#06B6D4', '#F97316', '#14B8A6', '#6366F1', '#EF4444']
 
 const TAG_LINE = /^\*\*`#([A-Za-z0-9_-]+)`\*\*[ \t]*(.*)$/
+const TAG_HEADING = /^\*\*`#([A-Za-z0-9_-]+)`([^*\n]+)\*\*[ \t]*(.*)$/
+const TAG_OPENS = /^\*\*`#[A-Za-z0-9_-]+`([^*\n]*)\*\*/m
 const HEX = /^#[0-9A-Fa-f]{6}$/
 
 // "nodes=#3B82F6, viewport=#EAB308" -> { nodes: '#3B82F6', viewport: '#EAB308' }; a malformed pair is skipped.
@@ -43,8 +47,14 @@ function split(text: string): Block[] {
   for (const line of text.split('\n')) {
     if (/^\s*(```|~~~)/.test(line)) inFence = !inFence
     const m = inFence ? null : TAG_LINE.exec(line)
+    const h = inFence || m ? null : TAG_HEADING.exec(line)
     if (m) blocks.push({ tag: m[1], lines: m[2] ? [m[2]] : [] })
-    else blocks[blocks.length - 1].lines.push(line)
+    else if (h) {
+      // The heading's own words, without the comma or colon that joined them to the tag.
+      const heading = h[2].replace(/^[\s,:;\u2013\u2014-]+/, '').trim()
+      const first = [heading ? `**${heading}**` : '', h[3]].filter(Boolean).join(' ')
+      blocks.push({ tag: h[1], lines: first ? [first] : [] })
+    } else blocks[blocks.length - 1].lines.push(line)
   }
   return blocks.filter(b => b.tag !== null || b.lines.join('').trim() !== '')
 }
@@ -53,7 +63,7 @@ export const register: Register = (on, options) => {
   const own = parseColors(typeof options.colors === 'string' ? options.colors : '')
 
   on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
-    if (e.props.isSummary || !/^\*\*`#[A-Za-z0-9_-]+`\*\*/m.test(e.props.text)) {
+    if (e.props.isSummary || !TAG_OPENS.test(e.props.text)) {
       return next(e)
     }
     const { Box, Text, Markdown } = $.ui.resolve(e)

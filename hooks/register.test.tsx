@@ -26,6 +26,19 @@ test('a tag opening a block is drawn in its color, on both surfaces', async ($, 
   }
 })
 
+test('a tag that opens a bold heading is drawn as a chip, the heading stays bold', async ($, on) => {
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine</Text>
+  })
+  const text = '**`#nodes`, card 17 P6:** DeepSeek hit its limit.\n\n**`#viewport`:** the Dome gets a switch.'
+  const ui = await $.ui.mount(reply(text, 'desktop'))
+  expect((await ui.find({ type: 'Text', text: /#nodes/ }))?.text).toBe(' #nodes ')
+  expect((await ui.find({ type: 'Text', text: /#viewport/ }))?.text).toBe(' #viewport ')
+  expect(await ui.find({ type: 'Text', text: 'engine' })).toBeUndefined()
+  await ui.unmount()
+})
+
 test('a reply without tags is left to the engine', async ($, on) => {
   on('ui.render', ($, e) => {
     const { Text } = $.ui.resolve(e)
